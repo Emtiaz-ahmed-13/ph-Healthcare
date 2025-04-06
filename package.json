@@ -1,0 +1,23 @@
+{
+  "name": "ph-Healthcare",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Emtiaz-ahmed-13/ph-Healthcare.git",
+  "author": "Emtiaz-ahmed-13 <emtiaz.ahmed@g.bracu.ac.bd>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.0",
+    "prisma": "^6.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
