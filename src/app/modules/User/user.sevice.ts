@@ -4,15 +4,11 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 const createAdmin = async (data: any) => {
-  const hasedPassowrd: string = await bcrypt.hash(data.password, 12);
-  console.log(
-    "🚀 ~ file: user.sevice.ts:10 ~ createAdmin ~ hasedPassowrd:",
-    hasedPassowrd
-  );
+  const hashedPassword: string = await bcrypt.hash(data.password, 12);
 
   const userData = {
-    email: data.admin.email,
-    password: hasedPassowrd,
+    email: data.email,
+    password: hashedPassword,
     role: UserRole.ADMIN,
     status: UserStatus.ACTIVE,
     needPasswordChange: false,
@@ -24,7 +20,10 @@ const createAdmin = async (data: any) => {
     });
 
     const createdAdminData = await prisma.admin.create({
-      data: data.admin,
+      data: {
+        ...data,
+        userId: createdUserData.id,
+      },
     });
 
     return createdAdminData;
