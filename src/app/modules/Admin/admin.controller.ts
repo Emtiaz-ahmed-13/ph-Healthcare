@@ -1,13 +1,16 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { AdminService } from "./admin.service";
 
-const prisma = new PrismaClient();
+import pick from "../../../shared/pick";
+import { adminFilterAbaleFields } from "./admin.constant";
+import { AdminService } from "./admin.service";
 
 const getAllFromDB = async (req: Request, res: Response) => {
   console.log(req.query);
   try {
-    const result = await AdminService.getAllFromDB(req.query);
+    const filter = pick(req.query, adminFilterAbaleFields);
+    const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+    console.log(options);
+    const result = await AdminService.getAllFromDB(filter, options);
 
     res.status(200).json({
       success: true,
