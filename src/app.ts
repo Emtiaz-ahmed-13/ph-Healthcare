@@ -1,8 +1,8 @@
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
 
-import { AdminRoutes } from "./app/modules/Admin/admin.routes";
-import { UserRoutes } from "./app/modules/User/user.routes";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import router from "./app/routes";
 
 const app: Application = express();
 
@@ -20,7 +20,6 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use("/api/v1/user", UserRoutes);
-app.use("/api/v1/admin", AdminRoutes);
-
+app.use('/api/v1',router);
+app.use(globalErrorHandler);
 export default app;
