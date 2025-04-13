@@ -1,31 +1,82 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from 'express';
+import httpStatus from 'http-status';
+import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
+import sendResponse from '../../../shared/sendResponse';
+import { adminFilterableFields } from './admin.constant';
+import { AdminService } from './admin.service';
 
-import pick from "../../../shared/pick";
-import { adminFilterAbaleFields } from "./admin.constant";
-import { AdminService } from "./admin.service";
 
-const getAllFromDB = async (req: Request, res: Response) => {
-  console.log(req.query);
-  try {
-    const filter = pick(req.query, adminFilterAbaleFields);
-    const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
-    console.log(options);
-    const result = await AdminService.getAllFromDB(filter, options);
+const getAllFromDB: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+    // console.log(req.query)
+    const filters = pick(req.query, adminFilterableFields);
+    const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder'])
+    console.log(options)
+    const result = await AdminService.getAllFromDB(filters, options)
 
-    res.status(200).json({
-      success: true,
-      message: "Admin data fetched successfully",
-      data: result,
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Admin data fetched!",
+        meta: result.meta,
+        data: result.data
+    })
+})
+
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await AdminService.getByIdFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Admin data fetched by id!",
+        data: result
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error?.message || "Failed to fetch admin data",
-      error: error,
-    });
-  }
-};
+})
+
+
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await AdminService.updateIntoDB(id, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Admin data updated!",
+        data: result
+    })
+})
+
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await AdminService.deleteFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Admin data deleted!",
+        data: result
+    })
+})
+
+
+const softDeleteFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await AdminService.softDeleteFromDB(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Admin data deleted!",
+        data: result
+    })
+});
 
 export const AdminController = {
-  getAllFromDB,
-};
+    getAllFromDB,
+    getByIdFromDB,
+    updateIntoDB,
+    deleteFromDB,
+    softDeleteFromDB
+}
