@@ -1,4 +1,4 @@
-import { Admin, Prisma } from "@prisma/client";
+import { Admin, Prisma, UserStatus } from "@prisma/client";
 
 import prisma from "../../../shared/prisma";
 
@@ -154,7 +154,7 @@ const softDeleteFromDB = async (id: string): Promise<Admin | null> => {
         email: adminDeletedData.email,
       },
       data: {
-        // status: UserStatus.DELETED,
+        status: UserStatus.BLOCKED,
       },
     });
 
