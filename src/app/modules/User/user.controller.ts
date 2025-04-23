@@ -1,21 +1,18 @@
+// user.controller.ts
 import { Request, Response } from "express";
-import catchAsync from "../../../shared/catchAsync";
 import { UserService } from "./user.sevice";
 
-const createAdmin = catchAsync(async (req: Request, res: Response) => {
-  const adminData = {
-    ...req.body,
-    password: req.body.password || "admin123",
-  };
+const createAdmin = async (req: Request, res: Response) => {
+  try {
+    const result = await UserService.createAdmin(req.body);
+    res.status(201).json({ success: true, data: result });
+  } catch (error: any) {
+    res
+      .status(400)
+      .json({ success: false, message: error.message, error: error });
+  }
+};
 
-  const result = await UserService.createAdmin(adminData);
-  res.status(200).json({
-    success: true,
-    message: "Admin created successfully",
-    data: result,
-  });
-});
-
-export const UserController = {
+export const userController = {
   createAdmin,
 };
