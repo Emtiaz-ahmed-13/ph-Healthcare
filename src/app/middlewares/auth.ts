@@ -1,12 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import httpStatus from "http-status"; // ✅ Correct import
+import httpStatus from "http-status";
 import { Secret } from "jsonwebtoken";
 import config from "../../config";
 import { jwtHelpers } from "../../helpers/jwtHelpers";
 import ApiError from "../erros/ApiError";
 
 const auth = (...roles: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (
+    req: Request & { user?: any },
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const token = req.headers.authorization;
 
@@ -18,6 +22,7 @@ const auth = (...roles: string[]) => {
         token,
         config.jwt.jwt_secrect as Secret
       );
+      req.user = verifiedUser;
 
       console.log("verifiedUser", verifiedUser);
 

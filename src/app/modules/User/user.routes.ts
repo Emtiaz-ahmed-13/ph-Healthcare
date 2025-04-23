@@ -1,13 +1,14 @@
-// user.routes.ts
+import { UserRole } from "@prisma/client";
 import { Router } from "express";
+import auth from "../../middlewares/auth";
 import { userController } from "./user.controller";
 
 const router = Router();
 
 router.post(
   "/",
-  // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  userController.createAdmin // Make sure this matches the controller method
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  userController.createAdmin
 );
 
 export const UserRoutes = router;
