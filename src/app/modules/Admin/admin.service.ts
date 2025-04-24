@@ -1,9 +1,7 @@
 import { Admin, Prisma, UserStatus } from "@prisma/client";
-
+import { paginationHelper } from "../../../helpars/paginationHelper";
 import prisma from "../../../shared/prisma";
-
-import { paginationHelper } from "../../../helpers/paginationHelper";
-import { IPaginationOptions } from "../../../interfaces/pagination";
+import { IPaginationOptions } from "../../interfaces/pagination";
 import { adminSearchAbleFields } from "./admin.constant";
 import { IAdminFilterRequest } from "./admin.interface";
 
@@ -154,7 +152,7 @@ const softDeleteFromDB = async (id: string): Promise<Admin | null> => {
         email: adminDeletedData.email,
       },
       data: {
-        status: UserStatus.BLOCKED,
+        status: UserStatus.DELETED,
       },
     });
 
